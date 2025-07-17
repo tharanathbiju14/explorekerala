@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Palmtree as PalmTree, Phone, Mail, MapPin, Facebook, Twitter, Instagram } from 'lucide-react';
 
 const Footer = () => {

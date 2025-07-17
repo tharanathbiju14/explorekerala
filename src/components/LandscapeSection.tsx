@@ -6,6 +6,7 @@ const LandscapeSection = () => {
   const landscapes = [
     {
       id: 1,
+      name: "beaches",
       title: "Beaches",
       subtitle: "Pristine coastal resorts",
       icon: Waves,
@@ -14,6 +15,7 @@ const LandscapeSection = () => {
     },
     {
       id: 2,
+      name: "mountains",
       title: "Mountains",
       subtitle: "Hill station retreats",
       icon: Mountain,
@@ -22,6 +24,7 @@ const LandscapeSection = () => {
     },
     {
       id: 3,
+      name: "backwaters",
       title: "Backwaters",
       subtitle: "Serene waterway stays",
       icon: Ship,
@@ -30,6 +33,7 @@ const LandscapeSection = () => {
     },
     {
       id: 4,
+      name: "forests",
       title: "Forests",
       subtitle: "Wildlife safari lodges",
       icon: Trees,
@@ -38,6 +42,7 @@ const LandscapeSection = () => {
     },
     {
       id: 5,
+      name: "cities",
       title: "Cities",
       subtitle: "Urban luxury hotels",
       icon: Building2,
@@ -64,7 +69,7 @@ const LandscapeSection = () => {
             const IconComponent = landscape.icon;
             return (
               <Link
-                to={`/hotels?landscape=${landscape.id}`}
+                to={`/hotels?landscape=${landscape.name}`}
                 key={landscape.id}
                 className={`
                   ${landscape.color} ${landscape.hoverColor}

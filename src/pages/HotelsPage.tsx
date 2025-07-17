@@ -1,65 +1,89 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Star, MapPin, Filter, Grid, List } from 'lucide-react';
-import { hotels, getHotelsByLandscape, getHotelsByDistrict } from '../data/hotels';
-import { Hotel } from '../types/hotel';
 
 const HotelsPage = () => {
   const [searchParams] = useSearchParams();
-  const [filteredHotels, setFilteredHotels] = useState<Hotel[]>(hotels);
+  const [hotels, setHotels] = useState<any[]>([]);
+  const [filteredHotels, setFilteredHotels] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState('name');
   const [priceRange, setPriceRange] = useState([0, 20000]);
   const [selectedRating, setSelectedRating] = useState(0);
   const [showMobileFilter, setShowMobileFilter] = useState(false);
-  const isMobile = window.innerWidth < 1024; // Or use a hook for better responsiveness
+  const isMobile = window.innerWidth < 1024;
 
   const landscape = searchParams.get('landscape');
   const district = searchParams.get('district');
 
   useEffect(() => {
-    let filtered = hotels;
-
-    if (landscape) {
-      filtered = getHotelsByLandscape(landscape);
-    } else if (district) {
-      filtered = getHotelsByDistrict(district);
+    setLoading(true);
+    let url = '';
+    if (district) {
+      url = `http://192.168.1.4:8080/user/fetch-hotels-by-district?district=${district}`;
+    } else if (landscape) {
+      url = `http://192.168.1.4:8080/hotel/fetch-hotels-by-landscape?landscape=${landscape}`;
+    } else {
+      url = 'http://192.168.1.4:8080/user/fetch-all-hotels';
     }
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => setHotels(Array.isArray(data) ? data : []))
+      .catch(() => setHotels([]))
+      .finally(() => setLoading(false));
+  }, [district, landscape]);
 
-    // Apply filters
-    filtered = filtered.filter(hotel => {
-      const priceMatch = hotel.price >= priceRange[0] && hotel.price <= priceRange[1];
-      const ratingMatch = selectedRating === 0 || hotel.rating >= selectedRating;
+  // Filtering and sorting logic
+  useEffect(() => {
+    let filtered = hotels.filter((hotel) => {
+      // Price filter (if price is a range, take min value)
+      let price = 0;
+      if (typeof hotel.hotelBasicPricePerNight === 'string') {
+        price = parseInt(hotel.hotelBasicPricePerNight.split('-')[0]);
+      } else {
+        price = Number(hotel.hotelBasicPricePerNight);
+      }
+      const priceMatch = price >= priceRange[0] && price <= priceRange[1];
+
+      // Rating filter
+      const ratingMatch = selectedRating === 0 || hotel.hotelRating >= selectedRating;
+
       return priceMatch && ratingMatch;
     });
 
-    // Apply sorting
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case 'price-low':
-          return a.price - b.price;
-        case 'price-high':
-          return b.price - a.price;
-        case 'rating':
-          return b.rating - a.rating;
-        default:
-          return a.name.localeCompare(b.name);
-      }
-    });
+    // Sorting
+    if (sortBy === 'name') {
+      filtered = filtered.sort((a, b) => a.hotelName.localeCompare(b.hotelName));
+    } else if (sortBy === 'price-low') {
+      filtered = filtered.sort((a, b) => {
+        const aPrice = typeof a.hotelBasicPricePerNight === 'string' ? parseInt(a.hotelBasicPricePerNight.split('-')[0]) : Number(a.hotelBasicPricePerNight);
+        const bPrice = typeof b.hotelBasicPricePerNight === 'string' ? parseInt(b.hotelBasicPricePerNight.split('-')[0]) : Number(b.hotelBasicPricePerNight);
+        return aPrice - bPrice;
+      });
+    } else if (sortBy === 'price-high') {
+      filtered = filtered.sort((a, b) => {
+        const aPrice = typeof a.hotelBasicPricePerNight === 'string' ? parseInt(a.hotelBasicPricePerNight.split('-')[0]) : Number(a.hotelBasicPricePerNight);
+        const bPrice = typeof b.hotelBasicPricePerNight === 'string' ? parseInt(b.hotelBasicPricePerNight.split('-')[0]) : Number(b.hotelBasicPricePerNight);
+        return bPrice - aPrice;
+      });
+    } else if (sortBy === 'rating') {
+      filtered = filtered.sort((a, b) => b.hotelRating - a.hotelRating);
+    }
 
     setFilteredHotels(filtered);
-  }, [landscape, district, sortBy, priceRange, selectedRating]);
+  }, [hotels, sortBy, priceRange, selectedRating]);
 
   const getPageTitle = () => {
     if (landscape) {
-      const landscapeNames = {
+      const landscapeNames: any = {
         beaches: 'Beach Hotels',
         mountains: 'Mountain Resorts',
         backwaters: 'Backwater Stays',
         forests: 'Forest Lodges',
         cities: 'City Hotels'
       };
-      return landscapeNames[landscape as keyof typeof landscapeNames] || 'Hotels';
+      return landscapeNames[landscape] || 'Hotels';
     }
     if (district) {
       return `Hotels in ${district.charAt(0).toUpperCase() + district.slice(1)}`;
@@ -178,7 +202,6 @@ const HotelsPage = () => {
 
           {/* Hotels List */}
           <div className="lg:w-3/4">
-            {/* View Toggle */}
             <div className="flex justify-between items-center mb-4 sm:mb-6">
               <div className="flex items-center space-x-2 sm:space-x-4">
                 <button
@@ -200,79 +223,81 @@ const HotelsPage = () => {
               </div>
             </div>
 
-            {/* Hotels Grid/List */}
-            <div className={`grid gap-3 sm:gap-6 ${
-              viewMode === 'grid' 
-                ? 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-3' 
-                : 'grid-cols-1'
-            }`}>
-              {filteredHotels.map((hotel) => (
-                <Link
-                  key={hotel.id}
-                  to={`/hotel/${hotel.id}`}
-                  className={`bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 ${
-                    viewMode === 'list' ? 'flex flex-col sm:flex-row' : ''
-                  }`}
-                >
-                  <div className={`relative ${viewMode === 'list' ? 'w-full sm:w-1/3' : ''}`}>
-                    <img
-                      src={hotel.image}
-                      alt={hotel.name}
-                      className={`object-cover ${
-                        viewMode === 'list' ? 'w-full h-32 sm:h-full' : 'w-full h-32 sm:h-48'
-                      }`}
-                    />
-                    <div className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-orange-500 text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-semibold">
-                      ₹{hotel.price.toLocaleString()}/night
-                    </div>
-                    {hotel.originalPrice && (
-                      <div className="absolute top-2 left-2 sm:top-4 sm:left-4 bg-red-500 text-white px-1 sm:px-2 py-1 rounded text-[10px] sm:text-xs">
-                        Save ₹{(hotel.originalPrice - hotel.price).toLocaleString()}
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className={`p-3 sm:p-6 ${viewMode === 'list' ? 'w-full sm:w-2/3' : ''}`}>
-                    <div className="flex items-center justify-between mb-1 sm:mb-2">
-                      <h3 className="text-base sm:text-xl font-semibold text-gray-800">{hotel.name}</h3>
-                      <div className="flex items-center space-x-1">
-                        <Star className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-500 fill-current" />
-                        <span className="text-xs sm:text-sm text-gray-600">{hotel.rating}</span>
-                        <span className="text-[10px] sm:text-xs text-gray-500">({hotel.reviewCount})</span>
+            {/* Loader */}
+            {loading ? (
+              <div className="flex justify-center items-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-600"></div>
+                <span className="ml-3 text-green-600 text-sm">Loading hotels...</span>
+              </div>
+            ) : (
+              <div className={`grid gap-3 sm:gap-6 ${
+                viewMode === 'grid' 
+                  ? 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-3' 
+                  : 'grid-cols-1'
+              }`}>
+                {filteredHotels.map((hotel) => (
+                  <Link
+                    key={hotel.hotelId}
+                    to={`/hotel/${hotel.hotelId}`}
+                    className={`bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 ${
+                      viewMode === 'list' ? 'flex flex-col sm:flex-row' : ''
+                    }`}
+                  >
+                    <div className={`relative ${viewMode === 'list' ? 'w-full sm:w-1/3' : ''}`}>
+                      <img
+                        src={hotel.hotelImageUrls?.[0] || ''}
+                        alt={hotel.hotelName}
+                        className={`object-cover ${
+                          viewMode === 'list' ? 'w-full h-32 sm:h-full' : 'w-full h-32 sm:h-48'
+                        }`}
+                      />
+                      <div className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-orange-500 text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-semibold">
+                        ₹{hotel.hotelBasicPricePerNight}/night
                       </div>
                     </div>
                     
-                    <div className="flex items-center space-x-1 sm:space-x-2 mb-2 sm:mb-4">
-                      <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500" />
-                      <span className="text-xs sm:text-gray-600">{hotel.location}</span>
+                    <div className={`p-3 sm:p-6 ${viewMode === 'list' ? 'w-full sm:w-2/3' : ''}`}>
+                      <div className="flex items-center justify-between mb-1 sm:mb-2">
+                        <h3 className="text-base sm:text-xl font-semibold text-gray-800">{hotel.hotelName}</h3>
+                        <div className="flex items-center space-x-1">
+                          <Star className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-500 fill-current" />
+                          <span className="text-xs sm:text-sm text-gray-600">{hotel.hotelRating}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center space-x-1 sm:space-x-2 mb-2 sm:mb-4">
+                        <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500" />
+                        <span className="text-xs sm:text-gray-600">{hotel.hotelAddress}</span>
+                      </div>
+                      
+                      <div className="flex flex-wrap gap-1 sm:gap-2 mb-2 sm:mb-4">
+                        {hotel.landscapeTypeName && (
+                          <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs sm:text-sm">
+                            {hotel.landscapeTypeName}
+                          </span>
+                        )}
+                        {hotel.hotelTypeName && (
+                          <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs sm:text-sm">
+                            {hotel.hotelTypeName}
+                          </span>
+                        )}
+                        {hotel.district && (
+                          <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs sm:text-sm">
+                            {hotel.district}
+                          </span>
+                        )}
+                      </div>
+                      
+                      <span className="block w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 sm:py-3 px-2 sm:px-6 rounded-lg transition-colors duration-200 text-center text-xs sm:text-base">
+                        View Details
+                      </span>
                     </div>
-                    
-                    <div className="flex flex-wrap gap-1 sm:gap-2 mb-2 sm:mb-4">
-                      {hotel.features.slice(0, 3).map((feature) => (
-                        <span
-                          key={feature}
-                          className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs sm:text-sm"
-                        >
-                          {feature}
-                        </span>
-                      ))}
-                    </div>
-                    
-                    {viewMode === 'list' && (
-                      <p className="text-gray-600 text-xs sm:text-sm mb-2 sm:mb-4 line-clamp-2">
-                        {hotel.description}
-                      </p>
-                    )}
-                    
-                    <span className="block w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 sm:py-3 px-2 sm:px-6 rounded-lg transition-colors duration-200 text-center text-xs sm:text-base">
-                      View Details
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
+                  </Link>
+                ))}
+              </div>
+            )}
 
-            {filteredHotels.length === 0 && (
+            {!loading && filteredHotels.length === 0 && (
               <div className="text-center py-8 sm:py-12">
                 <p className="text-gray-500 text-base sm:text-lg">No hotels found matching your criteria.</p>
                 <Link
