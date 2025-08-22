@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Star, MapPin, Phone, Mail, ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -9,12 +9,14 @@ const HotelDetailsPage = () => {
   const [currentImg, setCurrentImg] = useState(0);
 
   useEffect(() => {
-    fetch('http://192.168.1.4:8080/user/fetch-all-hotels')
+    fetch('http://192.168.1.14:8080/user/fetch-all-hotels')
       .then((res) => res.json())
       .then((data) => {
+        console.log('Fetched hotels data:', data); // <-- Log the fetched API data
         const found = Array.isArray(data)
           ? data.find((h) => String(h.hotelId) === String(id))
           : null;
+        console.log('Selected hotel details:', found); // <-- Log the selected hotel details
         setHotel(found || null);
       })
       .catch(() => setHotel(null))
@@ -82,7 +84,7 @@ const HotelDetailsPage = () => {
           <div className="lg:col-span-2">
             {/* Image Carousel */}
             <div className="mb-4 sm:mb-8">
-              <div className="relative w-full h-48 sm:h-96 flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden">
+              <div className="relative w-full h-72 sm:h-[32rem] flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden">
                 {hasImages ? (
                   <>
                     <img
@@ -152,6 +154,19 @@ const HotelDetailsPage = () => {
               <div className="text-lg sm:text-2xl font-bold text-green-600 mb-2">
                 ₹{hotel.hotelBasicPricePerNight}/night
               </div>
+              {/* Amenities */}
+              {hotel.amenities && hotel.amenities.length > 0 && (
+                <div className="mb-2 flex flex-wrap gap-2">
+                  {hotel.amenities.map((amenity: string, idx: number) => (
+                    <span
+                      key={idx}
+                      className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs sm:text-sm"
+                    >
+                      {amenity}
+                    </span>
+                  ))}
+                </div>
+              )}
               <p className="text-xs sm:text-base text-gray-600 leading-relaxed mb-3">{hotel.hotelDescription}</p>
             </div>
           </div>

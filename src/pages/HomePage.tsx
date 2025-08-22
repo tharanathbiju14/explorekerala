@@ -1,4 +1,4 @@
-import React from 'react';
+
 import Hero from '../components/Hero';
 import LandscapeSection from '../components/LandscapeSection';
 import DistrictSection from '../components/DistrictSection';

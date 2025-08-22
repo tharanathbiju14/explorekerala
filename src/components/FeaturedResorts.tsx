@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Star, MapPin } from 'lucide-react';
 
@@ -8,7 +8,7 @@ const FeaturedResorts = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch('http://192.168.1.4:8080/user/fetch-all-hotels')
+    fetch('http://192.168.1.14:8080/user/fetch-all-hotels')
       .then((res) => res.json())
       .then((data) => setResorts(data))
       .catch(() => setResorts([]))

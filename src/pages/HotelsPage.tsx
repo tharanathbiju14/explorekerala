@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Star, MapPin, Filter, Grid, List } from 'lucide-react';
 
@@ -21,11 +21,11 @@ const HotelsPage = () => {
     setLoading(true);
     let url = '';
     if (district) {
-      url = `http://192.168.1.4:8080/user/fetch-hotels-by-district?district=${district}`;
+      url = `http://192.168.1.14:8080/user/fetch-hotels-by-district?district=${district}`;
     } else if (landscape) {
-      url = `http://192.168.1.4:8080/hotel/fetch-hotels-by-landscape?landscape=${landscape}`;
+      url = `http://192.168.1.14:8080/hotel/fetch-hotels-by-landscape?landscape=${landscape}`;
     } else {
-      url = 'http://192.168.1.4:8080/user/fetch-all-hotels';
+      url = 'http://192.168.1.14:8080/user/fetch-all-hotels';
     }
     fetch(url)
       .then((res) => res.json())

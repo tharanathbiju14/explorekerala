@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
@@ -7,7 +7,12 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 const Hero = () => {
-  const offers = [
+  const [heroData, setHeroData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Default offers data as fallback
+  const defaultOffers = [
     {
       id: 1,
       title: "25% off this Onam!",
@@ -31,25 +36,81 @@ const Hero = () => {
     }
   ];
 
+  useEffect(() => {
+    const fetchHeroImages = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('http://192.168.1.14:8080/hotel/super-admin/get-active-images');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        // Transform the API data to match your component structure
+        const transformedData = data.map((item, index) => ({
+          id: item.carouselImageId || item.id || index + 1,
+          title: item.title || defaultOffers[index]?.title || `Special Offer ${index + 1}`,
+          description: item.description || defaultOffers[index]?.description || "Discover amazing deals and experiences",
+          image: item.carouselImage ? `data:image/jpeg;base64,${item.carouselImage}` : defaultOffers[index]?.image,
+          buttonText: item.buttonText || defaultOffers[index]?.buttonText || "Book Now"
+        }));
+
+        setHeroData(transformedData.length > 0 ? transformedData : defaultOffers);
+      } catch (err) {
+        console.error('Error fetching hero images:', err);
+        setError(err.message);
+        // Use default offers as fallback
+        setHeroData(defaultOffers);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHeroImages();
+  }, []);
+
+  // Loading state
+  if (loading) {
+    return (
+      <section className="relative h-[250px] md:h-screen bg-gray-200 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </section>
+    );
+  }
+
+  // Error state (still shows default content)
+  if (error) {
+    console.warn('Using fallback data due to API error:', error);
+  }
+
   return (
     <section className="relative h-[250px] md:h-screen">
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={0}
         slidesPerView={1}
-        navigation
+        navigation={heroData.length > 1}
         pagination={{ clickable: true }}
-        autoplay={{ delay: 5000, disableOnInteraction: false }}
-        loop={true}
+        autoplay={heroData.length > 1 ? { delay: 5000, disableOnInteraction: false } : false}
+        loop={heroData.length > 2}
         className="h-full"
       >
-        {offers.map((offer) => (
+        {heroData.map((offer) => (
           <SwiperSlide key={offer.id}>
             <div className="relative h-full">
               <img
                 src={offer.image}
                 alt={offer.title}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  // Fallback image if the API image fails to load
+                  e.target.src = "https://images.pexels.com/photos/1591373/pexels-photo-1591373.jpeg?auto=compress&cs=tinysrgb&w=1600";
+                }}
               />
               <div className="absolute inset-0 bg-black/40" />
               <div className="absolute inset-0 flex items-center justify-center">
@@ -60,8 +121,8 @@ const Hero = () => {
                   <p className="text-xs md:text-2xl mb-2 md:mb-8 leading-relaxed max-w-2xl mx-auto">
                     {offer.description}
                   </p>
-                  <Link 
-                    to="/hotels" 
+                  <Link
+                    to="/hotels"
                     className="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-1 px-2 md:py-4 md:px-8 rounded-lg text-xs md:text-lg transition-colors duration-200 transform hover:scale-105"
                   >
                     {offer.buttonText}

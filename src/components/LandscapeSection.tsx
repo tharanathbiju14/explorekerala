@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Link } from 'react-router-dom';
 import { Waves, Mountain, Ship, Trees, Building2 } from 'lucide-react';
 
