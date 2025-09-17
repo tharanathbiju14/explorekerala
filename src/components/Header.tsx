@@ -31,7 +31,7 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <PalmTree className="h-8 w-8 text-green-600" />
-            <span className="text-lg sm:text-2xl font-bold text-gray-800">KeralaStay</span>
+            <span className="text-lg sm:text-2xl font-bold text-gray-800">Explorekerala</span>
           </Link>
 
           {/* Desktop Navigation */}

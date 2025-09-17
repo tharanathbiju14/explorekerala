@@ -40,7 +40,7 @@ const ContactPage = () => {
     {
       icon: Mail,
       title: 'Email',
-      details: ['info@keralastay.com', 'bookings@keralastay.com'],
+      details: ['info@Explorekerala.com', 'bookings@Explorekerala.com'],
       description: 'Send us your queries anytime'
     },
     {
@@ -62,19 +62,19 @@ const ContactPage = () => {
       city: 'Kochi',
       address: 'Marine Drive, Ernakulam, Kochi, Kerala 682031',
       phone: '+91 9876543210',
-      email: 'kochi@keralastay.com'
+      email: 'kochi@Explorekerala.com'
     },
     {
       city: 'Thiruvananthapuram',
       address: 'MG Road, Thiruvananthapuram, Kerala 695001',
       phone: '+91 9876543211',
-      email: 'tvm@keralastay.com'
+      email: 'tvm@Explorekerala.com'
     },
     {
       city: 'Kozhikode',
       address: 'SM Street, Kozhikode, Kerala 673001',
       phone: '+91 9876543212',
-      email: 'kozhikode@keralastay.com'
+      email: 'kozhikode@Explorekerala.com'
     }
   ];
 

@@ -17,7 +17,7 @@ const Footer = () => {
           <div className="space-y-2 sm:space-y-4">
             <div className="flex items-center space-x-2">
               <PalmTree className="h-6 w-6 sm:h-8 sm:w-8 text-green-500" />
-              <span className="text-lg sm:text-2xl font-bold">KeralaStay</span>
+              <span className="text-lg sm:text-2xl font-bold">Explorekerala</span>
             </div>
             <p className="text-gray-300 text-xs sm:text-base leading-relaxed">
               Your gateway to experiencing the beauty of God's Own Country through exceptional hospitality.
@@ -51,7 +51,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-2 sm:space-x-3">
                 <Mail className="h-4 w-4 sm:h-5 sm:w-5 text-green-500" />
-                <span className="text-gray-300 text-xs sm:text-base">info@keralastay.com</span>
+                <span className="text-gray-300 text-xs sm:text-base">info@Explorekerala.com</span>
               </div>
               <div className="flex items-center space-x-2 sm:space-x-3">
                 <MapPin className="h-4 w-4 sm:h-5 sm:w-5 text-green-500" />
@@ -84,7 +84,7 @@ const Footer = () => {
         {/* Footer Bottom */}
         <div className="border-t border-gray-700 mt-8 pt-4 sm:mt-12 sm:pt-8 text-center">
           <p className="text-gray-400 text-xs sm:text-base">
-            © 2025 KeralaStay. All rights reserved. |{' '}
+            © 2025 Explorekerala. All rights reserved. |{' '}
             <a href="#" className="hover:text-green-400 transition-colors duration-200">
               Privacy Policy
             </a>{' '}

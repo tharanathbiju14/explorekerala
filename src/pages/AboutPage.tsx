@@ -26,7 +26,7 @@ const AboutPage = () => {
       name: 'Arjun Menon',
       role: 'Customer Experience Manager',
       image: 'https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&w=300',
-      description: 'Dedicated to creating memorable experiences for every KeralaStay guest.'
+      description: 'Dedicated to creating memorable experiences for every Explorekerala guest.'
     }
   ];
 
@@ -37,7 +37,7 @@ const AboutPage = () => {
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center space-x-3 mb-6">
             <PalmTree className="h-12 w-12" />
-            <h1 className="text-5xl font-bold">About KeralaStay</h1>
+            <h1 className="text-5xl font-bold">About Explorekerala</h1>
           </div>
           <p className="text-xl max-w-3xl mx-auto leading-relaxed">
             Your trusted partner in discovering the authentic beauty of God's Own Country through 
@@ -54,7 +54,7 @@ const AboutPage = () => {
               <h2 className="text-4xl font-bold text-gray-800 mb-6">Our Story</h2>
               <div className="space-y-4 text-gray-600 leading-relaxed">
                 <p>
-                  Founded in 2009, KeralaStay began as a small family business with a simple dream: 
+                  Founded in 2009, Explorekerala began as a small family business with a simple dream: 
                   to share the incredible beauty and rich culture of Kerala with travelers from around the world.
                 </p>
                 <p>
