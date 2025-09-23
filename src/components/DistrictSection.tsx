@@ -1,23 +1,39 @@
 import React from 'react';
+import kollamImg from '../images/kollam.jpg';
+import kasargodImg from '../images/1-Kasaragod.jpg';
+import thiruvananthapuramImg from '../images/amzing-places-to-visit-thiruvananthapuram.jpg';
+import alleppeyImg from '../images/Best-Places-to-Visit-in-Alleppey.jpg';
+import fortKochiImg from '../images/fort-kochi-courtyard-hotel-1024x.jpg';
+import kottayamImg from '../images/kottayam.jpg';
+import kozhikodeImg from '../images/kozhikode.jpg';
+import thrissurImg from '../images/one-day-thrissur-sightseeing-tou.jpg';
+import palakkadImg from '../images/palakkad.jpg';
+import pathanamthittaImg from '../images/pathanamthitta.jpg';
+import pexelsGodsonImg from '../images/pexels-godson-bright-352845-962464.jpg';
+import pexelsNandhukumarImg from '../images/pexels-nandhukumar-1065753.jpg';
+import pexelsStijnImg from '../images/pexels-stijn-dijkstra-1306815-29988777.jpg';
+import kannurImg from '../images/places-to-visit-in-kannur-shutte.jpg';
+import malappuramImg from '../images/thirunavaya_malappuram2023010514.jpg';
+import wayanadImg from '../images/waynadu-1024x768.jpg';
 import { Link } from 'react-router-dom';
 import { MapPin } from 'lucide-react';
 
 const DistrictSection = () => {
   const districts = [
-    { name: "Thiruvananthapuram", slug: "thiruvananthapuram", image: "https://images.pexels.com/photos/1591373/pexels-photo-1591373.jpeg?auto=compress&cs=tinysrgb&w=400" },
-    { name: "Kollam", slug: "kollam", image: "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400" },
-    { name: "Pathanamthitta", slug: "pathanamthitta", image: "https://images.pexels.com/photos/1450353/pexels-photo-1450353.jpeg?auto=compress&cs=tinysrgb&w=400" },
-    { name: "Alappuzha", slug: "alappuzha", image: "https://images.pexels.com/photos/1591056/pexels-photo-1591056.jpeg?auto=compress&cs=tinysrgb&w=400" },
-    { name: "Kottayam", slug: "kottayam", image: "https://images.pexels.com/photos/1769737/pexels-photo-1769737.jpeg?auto=compress&cs=tinysrgb&w=400" },
-    { name: "Idukki", slug: "idukki", image: "https://images.pexels.com/photos/1574829/pexels-photo-1574829.jpeg?auto=compress&cs=tinysrgb&w=400" },
-    { name: "Ernakulam", slug: "ernakulam", image: "https://images.pexels.com/photos/1591373/pexels-photo-1591373.jpeg?auto=compress&cs=tinysrgb&w=400" },
-    { name: "Thrissur", slug: "thrissur", image: "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400" },
-    { name: "Palakkad", slug: "palakkad", image: "https://images.pexels.com/photos/1450353/pexels-photo-1450353.jpeg?auto=compress&cs=tinysrgb&w=400" },
-    { name: "Malappuram", slug: "malappuram", image: "https://images.pexels.com/photos/1591056/pexels-photo-1591056.jpeg?auto=compress&cs=tinysrgb&w=400" },
-    { name: "Kozhikode", slug: "kozhikode", image: "https://images.pexels.com/photos/1769737/pexels-photo-1769737.jpeg?auto=compress&cs=tinysrgb&w=400" },
-    { name: "Wayanad", slug: "wayanad", image: "https://images.pexels.com/photos/1574829/pexels-photo-1574829.jpeg?auto=compress&cs=tinysrgb&w=400" },
-    { name: "Kannur", slug: "kannur", image: "https://images.pexels.com/photos/1591373/pexels-photo-1591373.jpeg?auto=compress&cs=tinysrgb&w=400" },
-    { name: "Kasaragod", slug: "kasaragod", image: "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400" }
+    { name: "Thiruvananthapuram", slug: "thiruvananthapuram", image: thiruvananthapuramImg },
+  { name: "Kollam", slug: "kollam", image: kollamImg },
+    { name: "Pathanamthitta", slug: "pathanamthitta", image: pathanamthittaImg },
+    { name: "Alappuzha", slug: "alappuzha", image: alleppeyImg },
+    { name: "Kottayam", slug: "kottayam", image: kottayamImg },
+    { name: "Idukki", slug: "idukki", image: pexelsNandhukumarImg },
+    { name: "Ernakulam", slug: "ernakulam", image: fortKochiImg },
+    { name: "Thrissur", slug: "thrissur", image: thrissurImg },
+    { name: "Palakkad", slug: "palakkad", image: palakkadImg },
+    { name: "Malappuram", slug: "malappuram", image: malappuramImg },
+    { name: "Kozhikode", slug: "kozhikode", image: kozhikodeImg },
+    { name: "Wayanad", slug: "wayanad", image: wayanadImg },
+    { name: "Kannur", slug: "kannur", image: kannurImg },
+    { name: "Kasaragod", slug: "kasaragod", image: kasargodImg }
   ];
 
   return (
