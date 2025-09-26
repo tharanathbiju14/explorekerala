@@ -3,10 +3,10 @@ import { Palmtree as PalmTree, Heart, Award, Users, Globe } from 'lucide-react';
 
 const AboutPage = () => {
   const stats = [
-    { icon: Users, label: 'Happy Guests', value: '50,000+' },
-    { icon: Globe, label: 'Properties', value: '200+' },
-    { icon: Award, label: 'Awards Won', value: '25+' },
-    { icon: Heart, label: 'Years Experience', value: '15+' }
+    { icon: Users, label: 'Happy Guests', value: '100+' },
+    { icon: Globe, label: 'Properties', value: '100+' },
+    // { icon: Award, label: 'Awards Won', value: '25+' },
+    { icon: Heart, label: 'Years Experience', value: '1+' }
   ];
 
   const team = [
@@ -54,7 +54,7 @@ const AboutPage = () => {
               <h2 className="text-4xl font-bold text-gray-800 mb-6">Our Story</h2>
               <div className="space-y-4 text-gray-600 leading-relaxed">
                 <p>
-                  Founded in 2009, Explorekerala began as a small family business with a simple dream: 
+                  Founded in 2025, Explorekerala began as a small family business with a simple dream: 
                   to share the incredible beauty and rich culture of Kerala with travelers from around the world.
                 </p>
                 <p>
@@ -78,7 +78,7 @@ const AboutPage = () => {
               />
               <div className="absolute -bottom-6 -right-6 bg-white p-6 rounded-xl shadow-lg">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-green-600">15+</div>
+                  <div className="text-3xl font-bold text-green-600">1+</div>
                   <div className="text-gray-600">Years of Excellence</div>
                 </div>
               </div>
@@ -93,11 +93,11 @@ const AboutPage = () => {
           <h2 className="text-4xl font-bold text-center text-gray-800 mb-16">
             Our Impact in Numbers
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-8 justify-items-center">
             {stats.map((stat) => {
               const IconComponent = stat.icon;
               return (
-                <div key={stat.label} className="text-center">
+                <div key={stat.label} className="text-center w-full">
                   <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                     <IconComponent className="h-8 w-8 text-green-600" />
                   </div>
@@ -136,8 +136,8 @@ const AboutPage = () => {
         </div>
       </section>
 
-      {/* Team */}
-      <section className="py-20 bg-white">
+      Team
+      {/* <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center text-gray-800 mb-16">
             Meet Our Team
@@ -157,7 +157,7 @@ const AboutPage = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Values */}
       <section className="py-20 bg-green-50">
