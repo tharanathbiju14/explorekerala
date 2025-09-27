@@ -121,12 +121,12 @@ const Hero = () => {
                   <p className="text-xs md:text-2xl mb-2 md:mb-8 leading-relaxed max-w-2xl mx-auto">
                     {offer.description}
                   </p>
-                  <Link
+                  {/* <Link
                     to="/hotels"
                     className="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-1 px-2 md:py-4 md:px-8 rounded-lg text-xs md:text-lg transition-colors duration-200 transform hover:scale-105"
                   >
                     {offer.buttonText}
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
             </div>
